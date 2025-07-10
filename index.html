@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyeri Finder - Pemetaan Rasa Nyeri</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">Nyeri Finder</div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#about">Tentang</a></li>
+                    <li><a href="#how-it-works">Cara Kerja</a></li>
+                    <li><a href="#contact">Kontak</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-section" id="home">
+        <div class="container hero-content">
+            <div class="text-content">
+                <h1>Temukan dan Pahami Nyeri Anda</h1>
+                <p>Nyeri Finder adalah alat interaktif yang membantu Anda memetakan lokasi dan karakteristik nyeri tubuh. Dapatkan wawasan awal tentang kemungkinan penyebab dan saran langkah pertama, lalu unduh hasilnya untuk diskusi dengan dokter Anda.</p>
+                <button class="cta-button" onclick="scrollToSection('pain-mapper')">Mulai Sekarang</button>
+            </div>
+            <div class="image-content">
+                <img src="images/pain-finder-hero.png" alt="Ilustrasi Pemetaan Nyeri">
+            </div>
+        </div>
+    </section>
+
+    <section id="pain-mapper" class="pain-mapper-section">
+        <div class="container">
+            <h2>Pemetaan Rasa Nyeri Anda</h2>
+            <div class="mapper-grid">
+                <div class="body-map-area">
+                    <h3>1. Klik Lokasi Nyeri Anda</h3>
+                    <div class="body-image-wrapper">
+                        <img id="humanBodyImage" src="images/human-body.png" alt="Gambar Tubuh Manusia" usemap="#body-parts-map">
+                        <map name="body-parts-map">
+                            <area shape="rect" coords="150,10,250,80" alt="Kepala" data-pain-location="Kepala" onclick="selectLocation('Kepala', this)">
+                            <area shape="rect" coords="170,90,230,150" alt="Leher" data-pain-location="Leher" onclick="selectLocation('Leher', this)">
+                            <area shape="rect" coords="120,160,280,250" alt="Dada" data-pain-location="Dada" onclick="selectLocation('Dada', this)">
+                            <area shape="rect" coords="130,260,270,350" alt="Perut" data-pain-location="Perut" onclick="selectLocation('Perut', this)">
+                            <area shape="rect" coords="20,180,100,300" alt="Lengan Kiri" data-pain-location="Lengan Kiri" onclick="selectLocation('Lengan Kiri', this)">
+                            <area shape="rect" coords="300,180,380,300" alt="Lengan Kanan" data-pain-location="Lengan Kanan" onclick="selectLocation('Lengan Kanan', this)">
+                            <area shape="rect" coords="150,360,250,500" alt="Paha" data-pain-location="Paha" onclick="selectLocation('Paha', this)">
+                            <area shape="rect" coords="150,510,250,650" alt="Kaki" data-pain-location="Kaki" onclick="selectLocation('Kaki', this)">
+                        </map>
+                        <div id="painDot" class="pain-dot" style="display: none;"></div>
+                    </div>
+                    <p class="selected-location-text">Lokasi Terpilih: <span id="selectedLocation">Belum dipilih</span></p>
+                </div>
+
+                <div class="pain-details-area">
+                    <h3>2. Pilih Jenis Nyeri</h3>
+                    <div class="pain-type-checklist">
+                        <label><input type="checkbox" value="Tajam"> Tajam</label>
+                        <label><input type="checkbox" value="Tumpul"> Tumpul</label>
+                        <label><input type="checkbox" value="Terbakar"> Terbakar</label>
+                        <label><input type="checkbox" value="Berdenyut"> Berdenyut</label>
+                        <label><input type="checkbox" value="Mencengkram"> Mencengkram</label>
+                        <label><input type="checkbox" value="Kram"> Kram</label>
+                        <label><input type="checkbox" value="Kesemutan"> Kesemutan</label>
+                        <label><input type="checkbox" value="Nyeri Tekan"> Nyeri Tekan</label>
+                        <label><input type="checkbox" value="Menyebar"> Menyebar</label>
+                        <label><input type="checkbox" value="Ringan"> Ringan</label>
+                        <label><input type="checkbox" value="Sedang"> Sedang</label>
+                        <label><input type="checkbox" value="Berat"> Berat</label>
+                    </div>
+
+                    <button class="generate-report-btn" onclick="generatePainAnalysis()">Analisis Nyeri</button>
+                </div>
+            </div>
+
+            <div id="resultArea" class="result-area" style="display: none;">
+                <h3>Hasil Analisis Nyeri Anda</h3>
+                <div class="analysis-output">
+                    <h4>Lokasi Nyeri: <span id="resultLocation"></span></h4>
+                    <h4>Jenis Nyeri: <span id="resultTypes"></span></h4>
+                    <h4>Kemungkinan Penyebab:</h4>
+                    <p id="possibleCauses"></p>
+                    <h4>Saran Langkah Awal:</h4>
+                    <p id="initialSteps"></p>
+                </div>
+                <button class="download-button" onclick="downloadResult()">Unduh Hasil Skrining (Teks)</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section-placeholder">
+        <div class="container">
+            <h2>Tentang Nyeri Finder</h2>
+            <p>Nyeri Finder dirancang untuk memberikan pemahaman awal tentang rasa nyeri yang Anda alami. Dengan antarmuka yang intuitif, Anda dapat dengan mudah mengidentifikasi lokasi dan jenis nyeri, serta mendapatkan informasi dasar yang relevan. Penting untuk diingat bahwa Nyeri Finder bukan pengganti diagnosis medis profesional, melainkan alat bantu untuk mempersiapkan konsultasi Anda dengan dokter.</p>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="section-placeholder">
+        <div class="container">
+            <h2>Bagaimana Nyeri Finder Bekerja?</h2>
+            <ol class="how-it-works-list">
+                <li><span>1</span> <strong>Pilih Lokasi Nyeri:</strong> Klik langsung pada gambar tubuh interaktif di area yang Anda rasakan nyeri.</li>
+                <li><span>2</span> <strong>Identifikasi Jenis Nyeri:</strong> Centang jenis-jenis nyeri yang paling menggambarkan sensasi yang Anda alami (misalnya: tajam, tumpul, terbakar).</li>
+                <li><span>3</span> <strong>Dapatkan Analisis Awal:</strong> Berdasarkan input Anda, Nyeri Finder akan menyajikan kemungkinan penyebab umum dan saran langkah awal yang bisa Anda lakukan.</li>
+                <li><span>4</span> <strong>Unduh Hasil:</strong> Simpan ringkasan analisis Anda untuk dibawa dan didiskusikan dengan dokter Anda, membantu mereka memahami kondisi Anda dengan lebih cepat dan akurat.</li>
+            </ol>
+        </div>
+    </section>
+
+    <section id="contact" class="section-placeholder">
+        <div class="container">
+            <h2>Kontak Kami</h2>
+            <p>Jika Anda memiliki pertanyaan atau masukan mengenai Nyeri Finder, jangan ragu untuk menghubungi kami melalui email di <a href="mailto:info@nyerifinder.com">info@nyerifinder.com</a>.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Nyeri Finder. Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        let selectedLocationText = "Belum dipilih";
+        let painDot = document.getElementById('painDot');
+        let humanBodyImage = document.getElementById('humanBodyImage');
+        let selectedAreaElement = null; // To keep track of the currently selected area element
+
+        function selectLocation(locationName, areaElement) {
+            selectedLocationText = locationName;
+            document.getElementById('selectedLocation').textContent = locationName;
+
+            // Remove active class from previously selected area
+            if (selectedAreaElement) {
+                selectedAreaElement.classList.remove('active-pain-area');
+            }
+
+            // Add active class to the new selected area
+            if (areaElement) {
+                areaElement.classList.add('active-pain-area');
+                selectedAreaElement = areaElement;
+            }
+
+            // Optional: Move a dot to the clicked location
+            const coords = areaElement ? areaElement.coords.split(',').map(Number) : [0,0,0,0];
+            const imgRect = humanBodyImage.getBoundingClientRect();
+            const imgNaturalWidth = humanBodyImage.naturalWidth;
+            const imgNaturalHeight = humanBodyImage.naturalHeight;
+            const imgDisplayedWidth = imgRect.width;
+            const imgDisplayedHeight = imgRect.height;
+
+            // Calculate scaling factors
+            const scaleX = imgDisplayedWidth / imgNaturalWidth;
+            const scaleY = imgDisplayedHeight / imgNaturalHeight;
+
+            // Calculate center of the clicked area relative to the image
+            const centerX = (coords[0] + coords[2]) / 2 * scaleX;
+            const centerY = (coords[1] + coords[3]) / 2 * scaleY;
+
+            painDot.style.left = `${centerX}px`;
+            painDot.style.top = `${centerY}px`;
+            painDot.style.display = 'block';
+        }
+
+        function generatePainAnalysis() {
+            const checkedPainTypes = Array.from(document.querySelectorAll('.pain-type-checklist input[type="checkbox"]:checked'))
+                                       .map(checkbox => checkbox.value);
+
+            if (selectedLocationText === "Belum dipilih" || checkedPainTypes.length === 0) {
+                alert("Mohon pilih lokasi nyeri dan setidaknya satu jenis nyeri.");
+                return;
+            }
+
+            document.getElementById('resultLocation').textContent = selectedLocationText;
+            document.getElementById('resultTypes').textContent = checkedPainTypes.join(', ');
+
+            let causes = "Informasi tidak tersedia untuk kombinasi ini.";
+            let steps = "Mohon konsultasikan dengan profesional medis.";
+
+            // Logika sederhana untuk demonstrasi
+            if (selectedLocationText === "Kepala") {
+                if (checkedPainTypes.includes("Tajam") || checkedPainTypes.includes("Berdenyut")) {
+                    causes = "Kemungkinan: Sakit kepala tegang, Migrain, Sinusitis.";
+                    steps = "Istirahat di tempat tenang, minum air putih cukup, hindari pemicu stres. Jika berlanjut atau parah, segera konsultasi ke dokter.";
+                } else if (checkedPainTypes.includes("Tumpul")) {
+                    causes = "Kemungkinan: Sakit kepala tegang, kelelahan, dehidrasi.";
+                    steps = "Cukupi istirahat, minum air, kelola stres. Jika tidak membaik, periksakan diri.";
+                }
+            } else if (selectedLocationText === "Leher") {
+                if (checkedPainTypes.includes("Kram") || checkedPainTypes.includes("Nyeri Tekan")) {
+                    causes = "Kemungkinan: Ketegangan otot leher, posisi tidur yang salah, postur buruk.";
+                    steps = "Lakukan peregangan ringan, gunakan kompres hangat, perbaiki postur. Jika nyeri hebat atau disertai kesemutan, segera ke dokter.";
+                }
+            } else if (selectedLocationText === "Dada") {
+                 if (checkedPainTypes.includes("Tajam") || checkedPainTypes.includes("Menyebar")) {
+                    causes = "Kemungkinan: Ketegangan otot, masalah pencernaan, atau dalam kasus serius bisa terkait jantung atau paru-paru. **PENTING: Nyeri dada tajam atau menyebar harus segera diperiksakan oleh dokter.**";
+                    steps = "**SEGERA CARI PERTOLONGAN MEDIS DARURAT** jika nyeri dada disertai sesak napas, pusing, keringat dingin, atau menyebar ke lengan/punggung.";
+                } else if (checkedPainTypes.includes("Tumpul")) {
+                    causes = "Kemungkinan: Refluks asam lambung, ketegangan otot. Namun, tetap perlu diperhatikan.";
+                    steps = "Hindari makanan pemicu, kelola stres. Jika nyeri terus-menerus, periksakan ke dokter.";
+                }
+            } else if (selectedLocationText === "Perut") {
+                if (checkedPainTypes.includes("Kram") || checkedPainTypes.includes("Tumpul")) {
+                    causes = "Kemungkinan: Masalah pencernaan (sembelit, diare), menstruasi (pada wanita), gas.";
+                    steps = "Cukupi cairan, makan makanan berserat, hindari makanan pedas/berlemak. Jika nyeri parah atau tidak hilang, segera ke dokter.";
+                }
+            } else if (selectedLocationText === "Kaki") {
+                if (checkedPainTypes.includes("Nyeri Tekan") || checkedPainTypes.includes("Tumpul")) {
+                    causes = "Kemungkinan: Kelelahan otot, cedera ringan, kram.";
+                    steps = "Istirahatkan kaki, kompres dingin/hangat, peregangan. Jika nyeri berlanjut atau bengkak, konsultasi ke dokter.";
+                }
+            }
+
+            document.getElementById('possibleCauses').textContent = causes;
+            document.getElementById('initialSteps').textContent = steps;
+            document.getElementById('resultArea').style.display = 'block';
+            scrollToSection('resultArea');
+        }
+
+        function downloadResult() {
+            const resultText = `
+                --- Hasil Skrining Nyeri Finder ---
+
+                Lokasi Nyeri: ${document.getElementById('resultLocation').textContent}
+                Jenis Nyeri: ${document.getElementById('resultTypes').textContent}
+
+                Kemungkinan Penyebab:
+                ${document.getElementById('possibleCauses').textContent}
+
+                Saran Langkah Awal:
+                ${document.getElementById('initialSteps').textContent}
+
+                -----------------------------------
+                Catatan: Informasi ini adalah skrining awal dan bukan diagnosis medis. Selalu konsultasikan dengan dokter untuk diagnosis dan penanganan yang tepat.
+            `;
+
+            const blob = new Blob([resultText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Nyeri_Finder_Skrining_Awal.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
